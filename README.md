@@ -53,7 +53,7 @@ Fits b-spline to given x, y data by adjusting internal knot y-values
 
 ```y```-> y values
 
-## BSpline()
+### BSpline()
 ```python
 BSpline(positions=None, raster=None):
 ```
