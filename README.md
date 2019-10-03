@@ -8,7 +8,7 @@ tensorflow-graphics will need to be manually incorporated in tf-bspline.
 This package will not exceed the speed of scipy's interpolation operations and is in fact
 much slower.
 ## BSpline()
-###BSpline(start_position, end_position, num_internal_knots, degree)
+### BSpline(start_position, end_position, num_internal_knots, degree)
 
 Constructor.
 
