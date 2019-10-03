@@ -52,26 +52,6 @@ Fits b-spline to given x, y data by adjusting internal knot y-values
 
 ```y```-> y values
 
-## get_spline
-```python
-get_spline(knots, positions=None, raster=None, degree=3)
-```
-
-Returns the b-spline points for the requested positions if raster is None. Else, returns evenly spaced points
-describing the b-spline defined by the interval size raster
-
-```knots```-> Knot values given as shape (2, num_knots) (i.e. ([x_values], [y_values]) ). Knots MUST BE EVENLY
-              SPACED. This function is based on a Cardinal B-Spline function from TensorFlow-graphics.
-
-```positions```-> x-values to get b-spline values for. Valid x-values are in the range:
-                  index_offset = (degree-1)/2
-                  [knots[0+index_offset], knots[-index_offset]) <-- Note the open right side bracket
-
-```raster```-> length to divide x axis interval into.
-
-```degree```-> degree of b-spline
-
-```Returns```-> points on the b-spline
 
 # Example
 Here is an example test script with output.
