@@ -1,12 +1,12 @@
 # tf-bspline
 A TensorFlow implementation of a b-spline interpolator. This is done so that TensorFlow can
-follow the operations (i.e. for use in calucating derivatives). This utilizes the 
+follow the operations (i.e. for use in calculating derivatives). This utilizes the 
 cardinal b-spline interpolation from tensorflow-graphics, however, only select files
-are taken from that package because it takes a long time to import. Be aware that updates to 
-tensorflow-graphics must be manually incorporated in tf-bspline.
+are taken from that package because it takes a very long time to import. Be aware that updates to 
+tensorflow-graphics will need to be manually incorporated in tf-bspline.
 
 This package will not exceed the speed of scipy's interpolation operations and is in fact
-slower.
+much slower.
 ## BSpline()
 ```python
 BSpline(self, start_position, end_position, num_internal_knots, degree)
