@@ -11,6 +11,7 @@ slower.
 ```python
 BSpline(self, start_position, end_position, num_internal_knots, degree)
 ```
+Constructor.
 
 Creates a Tensorflow-based b-spline object using x, y coordinate data.
 
@@ -52,6 +53,18 @@ Fits b-spline to given x, y data by adjusting internal knot y-values
 
 ```y```-> y values
 
+## BSpline()
+```python
+BSpline(positions=None, raster=None):
+```
+Returns the calculated b-spline points. MUST SPECIFY ONLY POSITIONS OR RASTER, NOT BOTH
+
+```positions```-> specific x-values to return values for.
+
+```raster```-> division length to divide full b-spline range by.
+
+```Returns```-> b-spline points with shape=(2, num_points).
+ i.e. (\[x], \[y])
 
 # Example
 Here is an example test script with output.
