@@ -6,7 +6,7 @@ from .util import interpolate
 
 
 class BSpline(object):
-    def __init__(self, start_position, end_position, num_internal_knots, degree=3):
+    def __init__(self, start_position, end_position, num_internal_knots, degree):
         """
         Creates a Tensorflow-based b-spline object using x, y coordinate data.
         :param start_position: start x-value of the bspline.
@@ -30,16 +30,14 @@ class BSpline(object):
                                        trainable=True,
                                        dtype=tf.float32)
 
-        # optimizer specs to use when fitting data points
-        self.lr = 0.5  # learning rate
-        self.beta_1 = 0.9  # gradient momentum
-        self.beta_2 = 0.99
-        self.epsilon = None
+        # optimizer to use when fitting data points
+        self.optimizer = tf.keras.optimizers.Adam(lr=0.5, beta_1=0.9, beta_2=0.99, epsilon=None)
 
         self.convergence_criteria = tf.constant(0.00001, dtype=tf.float32)
         self.gradient_momentum = tf.Variable(0, dtype=tf.float32)
         self.current_loss = tf.Variable(0, dtype=tf.float32)
-        self.alpha = 1 - self.beta_1
+        self.beta = 0.99  # gradient momentum coefficient
+        self.alpha = 1 - self.beta
 
     def _get_knot_positions(self):
         """
@@ -47,7 +45,7 @@ class BSpline(object):
         :return: tensorflow tensor of shape=(1, num_knots) with the x_values for b-spline knots
         """
         interval = (self.end_position - self.start_position) / (self.num_internal_knots + 1)
-        added_knots = self.degree + 1
+        added_knots = self.degree - 1
         return tf.constant(np.asarray([np.linspace(self.start_position - (interval * 0.5 * added_knots),
                                                    self.end_position + (interval * 0.5 * added_knots),
                                                    self.num_internal_knots + 2 + added_knots)]),
@@ -61,6 +59,8 @@ class BSpline(object):
                               given by get_knots().
         :return: None
         """
+        values = tf.cast(tf.convert_to_tensor(knot_y_values), tf.float32)
+        self.knot_values.assign(tf.reshape(values, self.knot_values.shape))
 
     def get_knots(self):
         """
@@ -76,6 +76,8 @@ class BSpline(object):
         :param raster: division length to divide full b-spline range by.
         :return: b-spline points with shape=(2, num_points) (i.e. ([x], [y]))
         """
+        knots = tf.concat([self.knot_positions, self.knot_values], axis=0)
+        return get_spline(knots, positions, raster, self.degree)
 
     @tf.function
     def fit_points(self, x, y):
@@ -102,7 +104,7 @@ class BSpline(object):
                 current_loss = tf.keras.losses.mse(y, values[:, 1])
                 loss_rate = tf.abs(tf.subtract(current_loss, self.current_loss))
                 self.current_loss.assign(current_loss)
-                self.gradient_momentum.assign(self.gradient_momentum*self.beta_1 + self.alpha*loss_rate)
+                self.gradient_momentum.assign(self.gradient_momentum*self.beta + self.alpha*loss_rate)
 
             # get gradient of loss with respect to knot y-values
             grads = t.gradient(current_loss, [self.knot_values])
@@ -152,6 +154,11 @@ def get_spline(knots, positions=None, raster=None, degree=3):
     if raster is not None:
         delta = tf.math.divide(max_pos, tf.divide(original_range, raster))
         positions = tf.range(start=0, limit=max_pos, delta=delta, dtype=tf.float32)
+
+        # this is because in testing on a mac, tf.range is not honoring limit
+        if tf.greater(positions[-1], max_pos):
+            positions = positions[:-1]
+
     elif positions is not None:
         positions = tf.cast(tf.convert_to_tensor(positions), dtype=tf.float32)
         # shift to start from 0
@@ -160,4 +167,5 @@ def get_spline(knots, positions=None, raster=None, degree=3):
         positions = tf.math.multiply(tf.math.divide(positions, original_range), max_pos)
     else:
         raise Exception('Need to provide either positions OR raster value.')
+
     return interpolate(knots, positions, degree, cyclical=False)
