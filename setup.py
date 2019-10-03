@@ -7,7 +7,7 @@ setup(
     author='Peter Somers',
     license='MIT',
     long_description_content_type='text/markdown',
-    long_description=open('README.md').read(),
+    #long_description=open('README.md').read(),
     packages=['tfbspline', 'tfbspline.util'],
     install_requires=['numpy', 'tensorflow']
 )
