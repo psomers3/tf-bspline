@@ -8,9 +8,8 @@ tensorflow-graphics will need to be manually incorporated in tf-bspline.
 This package will not exceed the speed of scipy's interpolation operations and is in fact
 much slower.
 ## BSpline()
-```python
-BSpline(start_position, end_position, num_internal_knots, degree)
-```
+###BSpline(start_position, end_position, num_internal_knots, degree)
+
 Constructor.
 
 Creates a Tensorflow-based b-spline object for use with x,y coordinate data.
@@ -25,27 +24,18 @@ Creates a Tensorflow-based b-spline object for use with x,y coordinate data.
                            
 ```degree```-> degree of the b-spline. Only up to degree 4 is supported.
 
-### set_knot_values
-```python
-BSpline.set_knot_values(knot_y_values)
-```
+### set_knot_values(knot_y_values)
 
 Manually set the knot y-values.
 
 ``` knot_y_values```-> new y-values. Must include exactly the same number of values as number of knots
                        given by get_knots().
 
-### get_knots
-```python
-BSpline.get_knots()
-```
+### get_knots()
 
 ```Returns```-> current knot positions and values.
 
-### fit_points
-```python
-BSpline.fit_points(x, y)
-```
+### fit_points(x, y)
 
 Fits b-spline to given x, y data by adjusting internal knot y-values
 
@@ -53,10 +43,8 @@ Fits b-spline to given x, y data by adjusting internal knot y-values
 
 ```y```-> y values
 
-### BSpline.\__call\__()
-```python
-BSpline.__call__(positions=None, raster=None):
-```
+### \__call\__(positions=None, raster=None)
+
 Returns the calculated b-spline points. MUST SPECIFY ONLY POSITIONS OR RASTER, NOT BOTH
 
 ```positions```-> specific x-values to return values for.
