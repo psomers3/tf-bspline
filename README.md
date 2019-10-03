@@ -12,7 +12,7 @@ much slower.
 BSpline(self, start_position, end_position, num_internal_knots, degree)
 ```
 
-Creates a Tensorflow-based b-spline object using x, y coordinate data.
+Creates a Tensorflow-based b-spline object for use with x,y coordinate data.
 
 ```start_position```-> start x-value of the bspline.
 
