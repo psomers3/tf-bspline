@@ -33,7 +33,7 @@ class BSpline(object):
         # optimizer to use when fitting data points
         self.optimizer = tf.keras.optimizers.Adam(lr=0.5, beta_1=0.9, beta_2=0.99, epsilon=None)
 
-        self.convergence_criteria = tf.constant(0.00001, dtype=tf.float32)
+        self.convergence_criteria = tf.constant(0.0001, dtype=tf.float32)
         self.gradient_momentum = tf.Variable(0, dtype=tf.float32)
         self.current_loss = tf.Variable(0, dtype=tf.float32)
         self.beta = 0.99  # gradient momentum coefficient
